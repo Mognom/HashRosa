@@ -1,0 +1,6 @@
+c:\users\irda2\documents\visual studio 2015\Projects\RobotPintor\RobotPintor\bin\Debug\RobotPintor.exe.config
+c:\users\irda2\documents\visual studio 2015\Projects\RobotPintor\RobotPintor\bin\Debug\RobotPintor.exe
+c:\users\irda2\documents\visual studio 2015\Projects\RobotPintor\RobotPintor\bin\Debug\RobotPintor.pdb
+c:\users\irda2\documents\visual studio 2015\Projects\RobotPintor\RobotPintor\obj\Debug\RobotPintor.csprojResolveAssemblyReference.cache
+c:\users\irda2\documents\visual studio 2015\Projects\RobotPintor\RobotPintor\obj\Debug\RobotPintor.exe
+c:\users\irda2\documents\visual studio 2015\Projects\RobotPintor\RobotPintor\obj\Debug\RobotPintor.pdb
