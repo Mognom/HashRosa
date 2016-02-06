@@ -10,3 +10,9 @@ C:\Users\irda2\Documents\GitHub\HashRosa\RobotPintor\RobotPintor\bin\Debug\Robot
 C:\Users\irda2\Documents\GitHub\HashRosa\RobotPintor\RobotPintor\obj\Debug\RobotPintor.csprojResolveAssemblyReference.cache
 C:\Users\irda2\Documents\GitHub\HashRosa\RobotPintor\RobotPintor\obj\Debug\RobotPintor.exe
 C:\Users\irda2\Documents\GitHub\HashRosa\RobotPintor\RobotPintor\obj\Debug\RobotPintor.pdb
+C:\Users\Usuario\Documents\GitHub\HashRosa\HashRosa\RobotPintor\RobotPintor\bin\Debug\RobotPintor.exe.config
+C:\Users\Usuario\Documents\GitHub\HashRosa\HashRosa\RobotPintor\RobotPintor\bin\Debug\RobotPintor.exe
+C:\Users\Usuario\Documents\GitHub\HashRosa\HashRosa\RobotPintor\RobotPintor\bin\Debug\RobotPintor.pdb
+C:\Users\Usuario\Documents\GitHub\HashRosa\HashRosa\RobotPintor\RobotPintor\obj\Debug\RobotPintor.csprojResolveAssemblyReference.cache
+C:\Users\Usuario\Documents\GitHub\HashRosa\HashRosa\RobotPintor\RobotPintor\obj\Debug\RobotPintor.exe
+C:\Users\Usuario\Documents\GitHub\HashRosa\HashRosa\RobotPintor\RobotPintor\obj\Debug\RobotPintor.pdb
