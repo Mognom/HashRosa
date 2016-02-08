@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RobotPintor {
@@ -7,7 +8,7 @@ namespace RobotPintor {
         private string file;
         private char[,] matrizInicial;
         private char[,] matrizResultado;
-        private Result[] resultCommands;
+        private List<Comando> resultCommands = new List<Comando>();
 
         private int ancho;
         private int alto;
@@ -63,7 +64,14 @@ namespace RobotPintor {
             PintarCuadrado(new Punto(3, 3), 2);
             PintarLinea(new Punto(8, 2), new Punto(8, 6));
             PintarLinea(new Punto(8, 7), new Punto(10, 7));*/
+            PrintMatriz(matrizInicial, this.ancho, this.alto);
             PrintMatriz(matrizResultado, this.ancho, this.alto);
+            Console.WriteLine("");
+            Console.WriteLine(resultCommands.Count);
+            for (int i = 0; i < resultCommands.Count; i++) {
+                Console.WriteLine(resultCommands[i]);
+            }
+            
         }
 
         private void Pensar(Punto origen) {
@@ -74,16 +82,18 @@ namespace RobotPintor {
             while (origen.y + rHComp < ancho && matrizInicial[origen.x, origen.y + rHComp] == char.Parse("#") ) {
                 Console.WriteLine("Exito Contiguo: " + (origen.y + rHComp));
                 destino = new Punto(origen.x, origen.y + rHComp);
+                rHoriz = new Result(rHComp, new Comando(origen, destino));
                 rHComp++;
             }
             // Comprobar horizontal
-            
+
             /*while (matrizInicial[origen.x,origen.y + prueba] == char.Parse("#") /*&& origen.y + prueba <= ancho) {
                 Console.WriteLine(origen.x + "," + origen.y + prueba);
                 destino = new Punto(origen.x, origen.y + prueba);
                 rHoriz = new Result(prueba + 1, new Comando(origen, destino));
                 prueba++;
             }*/
+            resultCommands.Add(rHoriz.comando);
             PintarLinea(origen, destino);
             // Comprobar vertical
             
@@ -103,12 +113,12 @@ namespace RobotPintor {
         private void PintarLinea(Punto origen, Punto destino) {
             if (origen.x == destino.x) {
                 if (destino.y - origen.y < 0) {
-                    for (int i = 0; i < origen.y - destino.y; i++) {
+                    for (int i = 0; i <= origen.y - destino.y; i++) {
                         matrizInicial[origen.x, origen.y + i] = char.Parse("♥");
                         matrizResultado[origen.x, origen.y + i] = char.Parse("#");
                     }
                 } else {
-                    for (int i = 0; i < destino.y - origen.y; i++) {
+                    for (int i = 0; i <= destino.y - origen.y; i++) {
                         matrizInicial[origen.x, destino.y - i] = char.Parse("♥");
                         matrizResultado[origen.x, destino.y - i] = char.Parse("#");
                     }
@@ -116,14 +126,14 @@ namespace RobotPintor {
                 //Linea Horizontal
             } else if (origen.y == destino.y) {
                 if (destino.x - origen.x < 0) {
-                    for (int i = 0; i < origen.x - destino.x; i++) {
+                    for (int i = 0; i <= origen.x - destino.x; i++) {
                         matrizInicial[origen.x + i, origen.y] = char.Parse("♥");
                         matrizResultado[origen.x + i, origen.y] = char.Parse("#");
                     }
                 } else {
-                    for (int i = 0; i < destino.x - origen.x; i++) {
-                        matrizInicial[destino.x + i, origen.y] = char.Parse("♥");
-                        matrizResultado[destino.x + i, origen.y] = char.Parse("#");
+                    for (int i = 0; i <= destino.x - origen.x; i++) {
+                        matrizInicial[destino.x - i, origen.y] = char.Parse("♥");
+                        matrizResultado[destino.x - i, origen.y] = char.Parse("#");
                     }
                 }
                 //Linea Vertical
