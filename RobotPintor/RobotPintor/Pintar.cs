@@ -7,6 +7,8 @@ namespace RobotPintor {
         private string file;
         private char[,] matrizInicial;
         private char[,] matrizResultado;
+        private Result[] resultCommands;
+
         private int ancho;
         private int alto;
 
@@ -31,6 +33,7 @@ namespace RobotPintor {
                 string tempLine = toPaint.ReadLine();
                 for (int j = 0; j < ancho; j++) {
                     matrizInicial[i, j] = tempLine[j];
+                    Console.WriteLine("Guardando: " + i + "," + j);
                 }
             }
             /*
@@ -43,11 +46,47 @@ namespace RobotPintor {
         }
 
         public void StartPaint() {
+            PrintMatriz(matrizInicial, this.ancho, this.alto);
+            Console.WriteLine("");
             Console.WriteLine("Pintando");
+
+            for (int i = 0; i < alto; i++) {
+                for (int j = 0; j < ancho; j++) {
+                    Console.WriteLine("Pensando: " + i + "," + j);
+                    if (matrizInicial[i, j] == char.Parse("#")) {
+                        Console.WriteLine("Exito: #");
+                        Pensar(new Punto(i,j));
+                    }
+                }
+            }
+            /*
             PintarCuadrado(new Punto(3, 3), 2);
             PintarLinea(new Punto(8, 2), new Punto(8, 6));
-            PintarLinea(new Punto(8, 7), new Punto(10, 7));
+            PintarLinea(new Punto(8, 7), new Punto(10, 7));*/
             PrintMatriz(matrizResultado, this.ancho, this.alto);
+        }
+
+        private void Pensar(Punto origen) {
+            int rHComp = 1;
+            Punto destino = origen;
+            Result rHoriz = new Result(rHComp, new Comando(origen, 0));
+
+            while (origen.y + rHComp < ancho && matrizInicial[origen.x, origen.y + rHComp] == char.Parse("#") ) {
+                Console.WriteLine("Exito Contiguo: " + (origen.y + rHComp));
+                destino = new Punto(origen.x, origen.y + rHComp);
+                rHComp++;
+            }
+            // Comprobar horizontal
+            
+            /*while (matrizInicial[origen.x,origen.y + prueba] == char.Parse("#") /*&& origen.y + prueba <= ancho) {
+                Console.WriteLine(origen.x + "," + origen.y + prueba);
+                destino = new Punto(origen.x, origen.y + prueba);
+                rHoriz = new Result(prueba + 1, new Comando(origen, destino));
+                prueba++;
+            }*/
+            PintarLinea(origen, destino);
+            // Comprobar vertical
+            
         }
 
         private void PintarCuadrado(Punto centro, int radio) {
@@ -65,21 +104,25 @@ namespace RobotPintor {
             if (origen.x == destino.x) {
                 if (destino.y - origen.y < 0) {
                     for (int i = 0; i < origen.y - destino.y; i++) {
+                        matrizInicial[origen.x, origen.y + i] = char.Parse("♥");
                         matrizResultado[origen.x, origen.y + i] = char.Parse("#");
                     }
                 } else {
                     for (int i = 0; i < destino.y - origen.y; i++) {
-                        matrizResultado[origen.x, destino.y + i] = char.Parse("#");
+                        matrizInicial[origen.x, destino.y - i] = char.Parse("♥");
+                        matrizResultado[origen.x, destino.y - i] = char.Parse("#");
                     }
                 }
                 //Linea Horizontal
             } else if (origen.y == destino.y) {
                 if (destino.x - origen.x < 0) {
                     for (int i = 0; i < origen.x - destino.x; i++) {
+                        matrizInicial[origen.x + i, origen.y] = char.Parse("♥");
                         matrizResultado[origen.x + i, origen.y] = char.Parse("#");
                     }
                 } else {
                     for (int i = 0; i < destino.x - origen.x; i++) {
+                        matrizInicial[destino.x + i, origen.y] = char.Parse("♥");
                         matrizResultado[destino.x + i, origen.y] = char.Parse("#");
                     }
                 }
