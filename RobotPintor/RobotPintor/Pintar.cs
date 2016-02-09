@@ -47,15 +47,15 @@ namespace RobotPintor {
         }
 
         public void StartPaint() {
-            PrintMatriz(matrizInicial, this.ancho, this.alto);
-            Console.WriteLine("");
+            //PrintMatriz(matrizInicial, this.ancho, this.alto);
+            //Console.WriteLine("");
             Console.WriteLine("Pintando");
 
             for (int i = 0; i < alto; i++) {
                 for (int j = 0; j < ancho; j++) {
-                    Console.WriteLine("Pensando: " + i + "," + j);
+                    //Console.WriteLine("Pensando: " + i + "," + j);
                     if (matrizInicial[i, j] == char.Parse("#")) {
-                        Console.WriteLine("Exito: #");
+                        //Console.WriteLine("Exito: #");
                         Pensar(new Punto(i,j));
                     }
                 }
@@ -66,37 +66,58 @@ namespace RobotPintor {
             PintarLinea(new Punto(8, 7), new Punto(10, 7));*/
             PrintMatriz(matrizInicial, this.ancho, this.alto);
             PrintMatriz(matrizResultado, this.ancho, this.alto);
-            Console.WriteLine("");
+            /*Console.WriteLine("");
             Console.WriteLine(resultCommands.Count);
             for (int i = 0; i < resultCommands.Count; i++) {
                 Console.WriteLine(resultCommands[i]);
+            }*/
+
+            StreamWriter writer = new StreamWriter(@"..\..\..\" + file.Split(char.Parse("."))[0] + ".result");
+            writer.WriteLine(resultCommands.Count);
+            for (int i = 0; i < resultCommands.Count; i++) {
+                writer.WriteLine(resultCommands[i]);
             }
-            
+
         }
 
         private void Pensar(Punto origen) {
-            int rHComp = 1;
             Punto destino = origen;
+            Result resultado = new Result(1, new Comando(origen, 0));
+
+            int rHComp = 1;
+            Punto destinoH = origen;
             Result rHoriz = new Result(rHComp, new Comando(origen, 0));
 
             while (origen.y + rHComp < ancho && matrizInicial[origen.x, origen.y + rHComp] == char.Parse("#") ) {
-                Console.WriteLine("Exito Contiguo: " + (origen.y + rHComp));
-                destino = new Punto(origen.x, origen.y + rHComp);
-                rHoriz = new Result(rHComp, new Comando(origen, destino));
+                //Console.WriteLine("Exito Contiguo: " + (origen.y + rHComp));
+                destinoH = new Punto(origen.x, origen.y + rHComp);
+                rHoriz = new Result(rHComp, new Comando(origen, destinoH));
                 rHComp++;
             }
             // Comprobar horizontal
+            int rVComp = 1;
+            Punto destinoV = origen;
+            Result rVert = new Result(rVComp, new Comando(origen, 0));
 
-            /*while (matrizInicial[origen.x,origen.y + prueba] == char.Parse("#") /*&& origen.y + prueba <= ancho) {
-                Console.WriteLine(origen.x + "," + origen.y + prueba);
-                destino = new Punto(origen.x, origen.y + prueba);
-                rHoriz = new Result(prueba + 1, new Comando(origen, destino));
-                prueba++;
-            }*/
-            resultCommands.Add(rHoriz.comando);
-            PintarLinea(origen, destino);
+            while (origen.x + rVComp < alto && matrizInicial[origen.x + rVComp, origen.y] == char.Parse("#")) {
+                //Console.WriteLine("Exito Vertical: " + (origen.x + rVComp));
+                destinoV = new Punto(origen.x + rVComp, origen.y);
+                rVert = new Result(rVComp, new Comando(origen, destinoV));
+                rVComp++;
+            }
+
+            if (rHoriz.puntuacion >= rVert.puntuacion) {
+                resultado = rHoriz;
+                destino = destinoH;
+            } else {
+                resultado = rVert;
+                destino = destinoV;
+            }
+
+
             // Comprobar vertical
-            
+            resultCommands.Add(resultado.comando);
+            PintarLinea(origen, destino);
         }
 
         private void PintarCuadrado(Punto centro, int radio) {
