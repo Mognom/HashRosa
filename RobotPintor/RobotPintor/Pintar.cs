@@ -15,7 +15,7 @@ namespace RobotPintor {
 
         public Pintar(string file) {
             this.file = file;
-            this.inicializarComponentes();
+            inicializarComponentes();
         }
 
         private void inicializarComponentes() {
@@ -24,8 +24,8 @@ namespace RobotPintor {
             string dimension = toPaint.ReadLine();
             string[] dimensionSplit = dimension.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
-            this.alto = int.Parse(dimensionSplit[0]);
-            this.ancho = int.Parse(dimensionSplit[1]);
+            alto = int.Parse(dimensionSplit[0]);
+            ancho = int.Parse(dimensionSplit[1]);
 
             Console.WriteLine("alto: " + alto + ", ancho: " + ancho);
             matrizInicial = new char[alto, ancho];
@@ -34,43 +34,26 @@ namespace RobotPintor {
                 string tempLine = toPaint.ReadLine();
                 for (int j = 0; j < ancho; j++) {
                     matrizInicial[i, j] = tempLine[j];
-                    Console.WriteLine("Guardando: " + i + "," + j);
+                    //Console.WriteLine("Guardando: " + i + "," + j);
                 }
             }
-            /*
-            for (int i = 0; i < alto; i++) {
-                Console.WriteLine("");
-                for (int j = 0; j < ancho; j++) {
-                    Console.Write(matrizInicial[i, j]);
-                }
-            }*/
         }
 
         public void StartPaint() {
-            //PrintMatriz(matrizInicial, this.ancho, this.alto);
-            //Console.WriteLine("");
             Console.WriteLine("Pintando");
 
             for (int i = 0; i < alto; i++) {
                 for (int j = 0; j < ancho; j++) {
-                    //Console.WriteLine("Pensando: " + i + "," + j);
                     if (matrizInicial[i, j] == char.Parse("#")) {
-                        //Console.WriteLine("Exito: #");
                         Pensar(new Punto(i,j));
                     }
                 }
             }
-            /*
-            PintarCuadrado(new Punto(3, 3), 2);
-            PintarLinea(new Punto(8, 2), new Punto(8, 6));
-            PintarLinea(new Punto(8, 7), new Punto(10, 7));*/
-            PrintMatriz(matrizInicial, this.ancho, this.alto);
-            PrintMatriz(matrizResultado, this.ancho, this.alto);
-            /*Console.WriteLine("");
-            Console.WriteLine(resultCommands.Count);
-            for (int i = 0; i < resultCommands.Count; i++) {
-                Console.WriteLine(resultCommands[i]);
-            }*/
+
+            /*PrintMatriz(matrizInicial, ancho, alto);
+            PrintMatriz(matrizResultado, ancho, alto);*/
+
+            Console.WriteLine(resultCommands.Count + " comandos empleados");
 
             StreamWriter writer = new StreamWriter(@"..\..\..\" + file.Split(char.Parse("."))[0] + ".result");
             writer.WriteLine(resultCommands.Count);
@@ -89,7 +72,6 @@ namespace RobotPintor {
             Result rHoriz = new Result(rHComp, new Comando(origen, 0));
 
             while (origen.y + rHComp < ancho && matrizInicial[origen.x, origen.y + rHComp] == char.Parse("#") ) {
-                //Console.WriteLine("Exito Contiguo: " + (origen.y + rHComp));
                 destinoH = new Punto(origen.x, origen.y + rHComp);
                 rHoriz = new Result(rHComp, new Comando(origen, destinoH));
                 rHComp++;
@@ -100,11 +82,14 @@ namespace RobotPintor {
             Result rVert = new Result(rVComp, new Comando(origen, 0));
 
             while (origen.x + rVComp < alto && matrizInicial[origen.x + rVComp, origen.y] == char.Parse("#")) {
-                //Console.WriteLine("Exito Vertical: " + (origen.x + rVComp));
                 destinoV = new Punto(origen.x + rVComp, origen.y);
                 rVert = new Result(rVComp, new Comando(origen, destinoV));
                 rVComp++;
             }
+            // Comprobar vertical
+
+
+            // Comprobar cuadrado
 
             if (rHoriz.puntuacion >= rVert.puntuacion) {
                 resultado = rHoriz;
@@ -113,9 +98,7 @@ namespace RobotPintor {
                 resultado = rVert;
                 destino = destinoV;
             }
-
-
-            // Comprobar vertical
+            
             resultCommands.Add(resultado.comando);
             PintarLinea(origen, destino);
         }

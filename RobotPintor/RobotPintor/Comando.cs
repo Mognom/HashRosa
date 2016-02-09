@@ -1,10 +1,22 @@
 ﻿
 namespace RobotPintor {
     public class Comando {
-        public string tipo;
-        public string origen;
-        public string destino;
-        public string radio;
+        public string tipo {
+            get;
+            private set;
+        }
+        public string origen {
+            get;
+            private set;
+        }
+        public string destino {
+            get;
+            private set;
+        }
+        public string radio {
+            get;
+            private set;
+        }
 
         public Comando(Punto origen) {
             this.tipo = "ERASE_CELL";

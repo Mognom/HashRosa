@@ -1,12 +1,18 @@
 ﻿namespace RobotPintor {
     public class Result {
 
-        public int puntuacion;
-        public Comando comando;
+        public int puntuacion {
+            get;
+            private set;
+        }
+        public Comando comando {
+            get;
+            private set;
+        }
 
         public Result() {
-            this.puntuacion = 0;
-            this.comando = null;
+            puntuacion = 0;
+            comando = null;
         }
 
         public Result(int puntuacion, Comando comando) {
