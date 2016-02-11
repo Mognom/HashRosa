@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace DroneIllo {
     class Program {
         static void Main(string[] args) {
+            World world = new World();
         }
     }
 }
