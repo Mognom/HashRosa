@@ -1,6 +1,14 @@
 ﻿using System;
 using System.IO;
 
+/*
+Lanzar dos threads para recorrer matriz en vertical y horizontal
+Algoritmo, cuando #, calculas linea vertical y horizontal, a partir de ellas buscar cuadrados, de los cuadrados
+obtenidos quedarse mayor puntuaje = numero de asteriscos.
+Los cuadrados, calcularlos con vacios y estos restarselos a la puntuacion.
+
+*/
+
 namespace RobotPintor {
     internal class Pintar {
 
