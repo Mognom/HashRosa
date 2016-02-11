@@ -60,6 +60,7 @@ namespace RobotPintor {
             for (int i = 0; i < resultCommands.Count; i++) {
                 writer.WriteLine(resultCommands[i]);
             }
+            writer.Close();
 
         }
 
@@ -73,7 +74,7 @@ namespace RobotPintor {
 
             while (origen.y + rHComp < ancho && matrizInicial[origen.x, origen.y + rHComp] == char.Parse("#") ) {
                 destinoH = new Punto(origen.x, origen.y + rHComp);
-                rHoriz = new Result(rHComp, new Comando(origen, destinoH));
+                rHoriz = new Result(rHComp + 1, new Comando(origen, destinoH));
                 rHComp++;
             }
             // Comprobar horizontal
@@ -83,7 +84,7 @@ namespace RobotPintor {
 
             while (origen.x + rVComp < alto && matrizInicial[origen.x + rVComp, origen.y] == char.Parse("#")) {
                 destinoV = new Punto(origen.x + rVComp, origen.y);
-                rVert = new Result(rVComp, new Comando(origen, destinoV));
+                rVert = new Result(rVComp + 1, new Comando(origen, destinoV));
                 rVComp++;
             }
             // Comprobar vertical
@@ -98,9 +99,65 @@ namespace RobotPintor {
                 resultado = rVert;
                 destino = destinoV;
             }
+
+            Result posibleCuadrado = PosibleCuadrado(resultado,origen, destino);
+            Console.WriteLine("Cuadrado puntuacion: " + posibleCuadrado.puntuacion + ", Linea Puntuacion: " + resultado.puntuacion);
+            if (posibleCuadrado.puntuacion < resultado.puntuacion) {
+                resultCommands.Add(resultado.comando);
+                PintarLinea(origen, destino);
+            }
             
-            resultCommands.Add(resultado.comando);
-            PintarLinea(origen, destino);
+        }
+
+        private Result PosibleCuadrado(Result resultado, Punto origen, Punto destino) {
+            Result result = resultado;
+            List<int> longitud = new List<int>();
+            for (int i = result.puntuacion; i > 0; i--) {
+                if (i % 2 != 0) {
+                    longitud.Add(i);
+                }
+            }
+            List<Punto> aBorrar = new List<Punto>();
+            for (int i = 0; i < longitud.Count; i++) {
+                aBorrar = new List<Punto>();
+                if (origen.x + longitud[i] < alto && origen.y + longitud[i] < ancho) {
+
+                    char[,] cuadrado = new char[longitud[i], longitud[i]];
+                    for (int j = 0; j < longitud[i] - 1; j++) {
+                        for (int k = 0; k < longitud[i] - 1; k++) {
+                            //Console.WriteLine(j + "," + k);
+                            cuadrado[j, k] = matrizInicial[origen.x + j, origen.y + k];
+                        }
+                    }
+
+                    int puntuacion = 0;
+
+                    for (int j = 0; j < longitud[i]; j++) {
+                        for (int k = 0; k < longitud[i]; k++) {
+                            if (cuadrado[j, k] == char.Parse("#")) {
+                                puntuacion++;
+                            }
+                            if (cuadrado[j, k] == char.Parse(".")) {
+                                aBorrar.Add(new Punto(j, k));
+                                puntuacion--;
+                            }
+                        }
+                    }
+                    result = new Result(puntuacion, new Comando(new Punto(origen.x + longitud[i] / 2, origen.y + longitud[i] / 2), longitud[i] / 2));
+                    if (result.puntuacion > resultado.puntuacion) {
+                        PintarCuadrado(new Punto(int.Parse(result.comando.origen.Split()[0]), int.Parse(result.comando.origen.Split()[1])), int.Parse(result.comando.radio));
+                        resultCommands.Add(result.comando);
+                        for (int j = 0; j < aBorrar.Count; j++) {
+                            Borrar(aBorrar[j]);
+                            resultCommands.Add(new Comando(aBorrar[j]));
+                        }
+                        break;
+                    }
+                }
+
+            }
+
+            return result;
         }
 
         private void PintarCuadrado(Punto centro, int radio) {
@@ -111,6 +168,12 @@ namespace RobotPintor {
                         matrizResultado[centro.x + i, centro.y + j] = char.Parse("#");
                     }
                 }
+            }
+        }
+
+        private void Borrar(Punto origen) {
+            if (matrizResultado[origen.x, origen.y] == char.Parse("#")) {
+                matrizResultado[origen.x, origen.y] = char.Parse(".");
             }
         }
 
